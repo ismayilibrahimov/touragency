@@ -1,0 +1,118 @@
+﻿@model TourAgency.Models.BookingViewModel
+
+@{
+    ViewData["Title"] = "About Page";
+    var tour = ViewBag.Tour;
+}
+
+<div class="site-section bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-7 mb-5">
+
+
+
+                <form asp-controller="Home" asp-action="Booking" method="post" class="p-5 bg-white">
+
+
+                    <div class="row form-group">
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <label class="text-black" asp-for="FirstName">First Name</label>
+                            <input asp-for="FirstName" class="form-control" placeholder="First Name">
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="text-black" asp-for="LastName">Last Name</label>
+                            <input asp-for="LastName" class="form-control" placeholder="Last Name">
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row form-group">
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <label class="text-black" asp-for="Date">Date of Tour</label>
+                            <input asp-for="Date" class="form-control datepicker px-2" placeholder="Date of visit">
+                            <span asp-validation-for="Date" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="text-black" asp-for="Email">Email</label>
+                            <input asp-for="Email" class="form-control" placeholder="Email">
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row form-group">
+                        <div class="col-md-12">
+                            <label class="text-black" asp-for="PhoneNumber">Phone</label>
+                            <input asp-for="PhoneNumber" class="form-control" placeholder="Phone Number" min="1111" max="9999999999999">
+                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row form-group">
+                        <div class="col-md-6">
+                            <label class="text-black" asp-for="Person">How Many Person</label>
+                            <input asp-for="Person" class="form-control" value="1" min="1" max="999">
+                            <span asp-validation-for="Person" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="text-center mt-4 h3" id="priceDiv">$@tour.Price</div>
+                            <input type="hidden" asp-for="Price" value="@tour.Price">
+                            <span asp-validation-for="Price" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row form-group">
+                        <div class="col-md-12">
+                            <label class="text-black" asp-for="TourName">Tour</label>
+                            <select asp-for="TourName" class="form-control">
+                                @foreach (var item in ViewBag.Titles)
+                                {
+                                    <option value="@item" selected="@(tour.Title == item ? "selected" : null)">@item</option>
+                                }
+                            </select>
+                            <span asp-validation-for="TourName" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row form-group">
+                        <div class="col-md-12">
+                            <label class="text-black" asp-for="Note">Notes</label>
+                            <textarea asp-for="Note" cols="30" rows="5" class="form-control" placeholder="Write your notes or questions here..."></textarea>
+                            <span asp-validation-for="Note" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row form-group">
+                        <div class="col-md-12">
+                            <input type="submit" value="Send" class="btn btn-primary py-2 px-4 text-white">
+                        </div>
+                    </div>
+
+
+                </form>
+            </div>
+            <div class="col-md-5">
+
+
+
+                <div class="p-4 mb-3 bg-white">
+                    <img src="~/images/@tour.ImageName" alt="Image" class="img-fluid mb-4 rounded">
+                    <h3 class="h5 text-black mb-3">@tour.Title</h3>
+                    <p>@tour.Description</p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        document.getElementsByName("Person")[0].addEventListener('change', function () {
+            document.getElementById("priceDiv").innerHTML = "$" + ((this.value - 1) * 25 + @tour.Price);
+            document.getElementById("Price").value = ((this.value - 1) * 25 + @tour.Price);
+        });
+    </script>
+}
